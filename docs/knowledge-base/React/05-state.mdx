@@ -1,0 +1,423 @@
+---
+title: State in React
+description: Learn how to manage component state in React
+---
+
+# State in React
+
+State allows React components to create and manage their own data that can change over time. Unlike props, which are passed from parent to child and are read-only, state is private to a component and can be updated.
+
+## Understanding State
+
+State is:
+- **Data** that changes during the component's lifetime
+- **Private** to the component (not accessible to parent/sibling components)
+- **Changeable** through the `setState` method or hooks
+- **Causes re-renders** when updated
+
+## State in Class Components
+
+Before React Hooks, state was primarily used in class components:
+
+```jsx
+import React from 'react';
+
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0
+    };
+  }
+
+  render() {
+    return (
+      <div>
+        <p>Count: {this.state.count}</p>
+        <button onClick={() => this.setState({ count: this.state.count + 1 })}>
+          Increment
+        </button>
+      </div>
+    );
+  }
+}
+
+export default Counter;
+```
+
+## State in Functional Components (useState Hook)
+
+Modern React uses the `useState` hook to add state to functional components:
+
+```jsx
+import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>
+        Increment
+      </button>
+    </div>
+  );
+}
+
+export default Counter;
+```
+
+### Syntax Breakdown
+
+```jsx
+const [state, setState] = useState(initialValue);
+```
+
+- **`state`** - Current value of the state
+- **`setState`** - Function to update the state
+- **`initialValue`** - Initial value of the state (can be any type)
+
+## Multiple State Variables
+
+You can have multiple state variables in the same component:
+
+```jsx
+function Form() {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [age, setAge] = useState(0);
+
+  return (
+    <div>
+      <input
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+        placeholder="First Name"
+      />
+      <input
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
+        placeholder="Last Name"
+      />
+      <input
+        value={age}
+        onChange={(e) => setAge(Number(e.target.value))}
+        placeholder="Age"
+        type="number"
+      />
+      <p>
+        Hello, {firstName} {lastName}! You are {age} years old.
+      </p>
+    </div>
+  );
+}
+```
+
+## Complex State Objects
+
+Store multiple related values in a single state object:
+
+```jsx
+function UserProfile() {
+  const [user, setUser] = useState({
+    name: 'John Doe',
+    email: 'john@example.com',
+    city: 'New York'
+  });
+
+  const handleChange = (field, value) => {
+    setUser({
+      ...user,        // Spread operator copies existing properties
+      [field]: value  // Update only the changed field
+    });
+  };
+
+  return (
+    <div>
+      <input
+        value={user.name}
+        onChange={(e) => handleChange('name', e.target.value)}
+        placeholder="Name"
+      />
+      <input
+        value={user.email}
+        onChange={(e) => handleChange('email', e.target.value)}
+        placeholder="Email"
+      />
+      <input
+        value={user.city}
+        onChange={(e) => handleChange('city', e.target.value)}
+        placeholder="City"
+      />
+      <p>Name: {user.name}, Email: {user.email}, City: {user.city}</p>
+    </div>
+  );
+}
+```
+
+## State with Arrays
+
+Managing array state requires creating a new array:
+
+```jsx
+function TodoApp() {
+  const [todos, setTodos] = useState([
+    { id: 1, text: 'Learn React', completed: false },
+    { id: 2, text: 'Build a project', completed: false }
+  ]);
+  const [input, setInput] = useState('');
+
+  const addTodo = () => {
+    const newTodo = {
+      id: Date.now(),
+      text: input,
+      completed: false
+    };
+    setTodos([...todos, newTodo]);
+    setInput('');
+  };
+
+  const toggleTodo = (id) => {
+    setTodos(todos.map(todo => 
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    ));
+  };
+
+  const deleteTodo = (id) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  return (
+    <div>
+      <div>
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Add a new todo"
+        />
+        <button onClick={addTodo}>Add</button>
+      </div>
+      <ul>
+        {todos.map(todo => (
+          <li key={todo.id}>
+            <input
+              type="checkbox"
+              checked={todo.completed}
+              onChange={() => toggleTodo(todo.id)}
+            />
+            <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+              {todo.text}
+            </span>
+            <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+## Updating State Based on Previous State
+
+When the new state depends on the previous state, use a function:
+
+```jsx
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  const increment = () => {
+    setCount(prevCount => prevCount + 1);
+  };
+
+  const decrement = () => {
+    setCount(prevCount => prevCount - 1);
+  };
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>Increment</button>
+      <button onClick={decrement}>Decrement</button>
+    </div>
+  );
+}
+```
+
+## Lazy Initialization
+
+Initialize state with an expensive computation:
+
+```jsx
+function ExpensiveComponent() {
+  const [data, setData] = useState(() => {
+    // This function only runs once during initial render
+    console.log('Initializing data...');
+    return fetchInitialData(); // Expensive operation
+  });
+
+  return <div>{data}</div>;
+}
+```
+
+## State with Forms
+
+Managing form state is a common use case:
+
+```jsx
+function LoginForm() {
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    rememberMe: false
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Submitting:', formData);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        name="username"
+        value={formData.username}
+        onChange={handleChange}
+        placeholder="Username"
+      />
+      <input
+        name="password"
+        type="password"
+        value={formData.password}
+        onChange={handleChange}
+        placeholder="Password"
+      />
+      <label>
+        <input
+          name="rememberMe"
+          type="checkbox"
+          checked={formData.rememberMe}
+          onChange={handleChange}
+        />
+        Remember me
+      </label>
+      <button type="submit">Login</button>
+    </form>
+  );
+}
+```
+
+## Boolean State
+
+Toggle boolean values:
+
+```jsx
+function Toggle() {
+  const [isVisible, setIsVisible] = useState(true);
+
+  return (
+    <div>
+      <button onClick={() => setIsVisible(!isVisible)}>
+        {isVisible ? 'Hide' : 'Show'}
+      </button>
+      {isVisible && <p>This content is visible!</p>}
+    </div>
+  );
+}
+```
+
+## Conditional State Updates
+
+Update state only under certain conditions:
+
+```jsx
+function DiscountCalculator() {
+  const [price, setPrice] = useState(100);
+  const [quantity, setQuantity] = useState(1);
+
+  const updateQuantity = (newQuantity) => {
+    if (newQuantity > 0 && newQuantity <= 100) {
+      setQuantity(newQuantity);
+    }
+  };
+
+  const totalPrice = price * quantity;
+  const discount = quantity >= 10 ? totalPrice * 0.1 : 0;
+  const finalPrice = totalPrice - discount;
+
+  return (
+    <div>
+      <p>Price per unit: ${price}</p>
+      <input
+        type="number"
+        value={quantity}
+        onChange={(e) => updateQuantity(Number(e.target.value))}
+        min="1"
+        max="100"
+      />
+      <p>Total: ${totalPrice}</p>
+      {discount > 0 && <p>Discount: -${discount.toFixed(2)}</p>}
+      <p>Final Price: ${finalPrice.toFixed(2)}</p>
+    </div>
+  );
+}
+```
+
+## State Immutability
+
+Always create new state objects/arrays instead of mutating existing ones:
+
+```jsx
+// ❌ WRONG - Direct mutation
+function BadExample() {
+  const [user, setUser] = useState({ name: 'John' });
+  
+  const updateName = (newName) => {
+    user.name = newName; // DON'T DO THIS!
+    setUser(user);
+  };
+}
+
+// ✅ CORRECT - Immutable update
+function GoodExample() {
+  const [user, setUser] = useState({ name: 'John' });
+  
+  const updateName = (newName) => {
+    setUser({ ...user, name: newName });
+  };
+}
+```
+
+## Best Practices
+
+1. **Keep state minimal** - Only store data that changes
+2. **Don't store derived values** - Calculate them from state
+3. **Use multiple state values** - For different kinds of data
+4. **Lift state up** - To the nearest common parent if multiple components need it
+5. **Treat state as immutable** - Always create new objects/arrays
+6. **Use useState for simple state** - Use useReducer for complex state logic
+7. **Initialize state properly** - Set initial values based on your needs
+
+## When to Use State
+
+Use state when:
+- Values change over time (user input, animations, etc.)
+- Different parts of your component depend on this value
+- You want re-renders when values change
+
+Don't use state when:
+- Values never change (use props instead)
+- Values are derived from props (calculate them)
+- Values are used only within event handlers (use local variables)
+
+## Summary
+
+State is essential for building interactive React components. It allows you to create components that respond to user input and change their behavior over time. Understanding how to manage state effectively is key to mastering React.

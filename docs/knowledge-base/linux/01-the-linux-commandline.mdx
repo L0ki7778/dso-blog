@@ -1,110 +1,379 @@
 ---
-id: linux-befehle
-slug: /linux-befehle
-title: Linux Befehle (Ubuntu)
-description: Übersicht wichtiger Linux-Befehle für Ubuntu, nach Kategorien sortiert.
-Linux Befehle für Ubuntu
-Diese Seite bietet eine strukturierte Übersicht über die wichtigsten Linux-Befehle, die du im Alltag unter Ubuntu verwenden kannst.
+id: linux-commands
+slug: /linux-commands
+title: Linux Commands (Ubuntu)
+description: Overview of important Linux commands for Ubuntu, organized by category.
 ---
 
+# Linux Commands (Ubuntu)
 
-📁 Datei- und Verzeichnisverwaltung
-| Befehl | Beschreibung |
-| ----------- | ----------- |
-| `ls`|	Listet Dateien und Verzeichnisse auf |
-| `ls -la`|	Detaillierte Ansicht inkl. versteckter Dateien |
-| `cd <verzeichnis>`|	Wechselt das Verzeichnis |
-| `pwd`|	Zeigt aktuelles Verzeichnis |
-| `mkdir <name>`|	Erstellt ein neues Verzeichnis |
-| `rmdir <name>`|	Löscht leeres Verzeichnis |
-| `rm <datei>`|	Löscht Datei |
-| `rm -r <ordner>`|	Löscht Ordner rekursiv |
-| `cp <quelle> <ziel>`|	Kopiert Dateien/Ordner |
-| `mv <quelle> <ziel>`|	Verschiebt oder benennt um |
----
-📄 Dateiinhalte anzeigen & bearbeiten
-| Befehl | Beschreibung |
-| ----------- | ----------- |
-|`cat <datei>`	| Zeigt gesamten Dateiinhalt|
-|`less <datei>`	| Scrollbare Ansicht|
-|`head <datei>`	| Erste Zeilen anzeigen|
-|`tail <datei>`	| Letzte Zeilen anzeigen|
-|`tail -f <datei>`	| Live-Log anzeigen|
-|`nano <datei>`	| Einfacher Editor|
-|`vim <datei>`	| Erweiterter Editor|
----
-🔍 Suche & Filter
-| Befehl | Beschreibung |
-| ----------- | ----------- |
-|`find <pfad> -name <name>`	|Sucht Dateien|
-|`grep <muster> <datei>`	|Sucht Text in Datei|
-|`grep -r <muster> .`	|Rekursive Suche|
-|`locate <name>`	|Schnelle Dateisuche|
-|`which <befehl>`	|Pfad eines Befehls|
----
-⚙️ Systeminformationen
-| Befehl | Beschreibung |
-| ----------- | ----------- |
-|`uname -a`	|Systeminformationen|
-|`htop`	|Interaktive Prozessübersicht|
-|`top`	|Prozessliste|
-|`df -h`|	Speicherplatz anzeigen|
-|`du -sh <ordner>`	|Ordnergröße anzeigen|
-|`free -h`	|RAM-Auslastung|
----
-🔐 Benutzer & Rechte
-| Befehl | Beschreibung |
-| ----------- | ----------- |
-|`whoami`	|Aktueller Benutzer|
-|`id`	|Benutzer-ID anzeigen|
-|`chmod +x <datei>`|	Datei ausführbar machen|
-|`chmod 755 <datei>`|	Rechte setzen|
-|`chown user:group <datei>`|	Besitzer ändern|
-|`sudo <befehl>`|	Befehl als Administrator ausführen|
----
-📦 Paketverwaltung (APT)
-| Befehl | Beschreibung |
-| ----------- | ----------- |
-|`sudo apt update`	|Paketliste aktualisieren|
-|`sudo apt upgrade`	|Pakete aktualisieren|
-|`sudo apt install <paket>`	|Paket installieren|
-|`sudo apt remove <paket>`	|Paket entfernen|
-|`apt search <paket>`	|Paket suchen|
----
-🌐 Netzwerk
-| Befehl | Beschreibung |
-| ----------- | ----------- |
-|`ping <host>`	|Netzwerkverbindung testen|
-|`ip a`	|IP-Adressen anzeigen|
-|`curl <url>`	|HTTP-Anfrage senden|
-|`wget <url>`	|Datei herunterladen|
-|`netstat -tuln`|	Offene Ports anzeigen|
----
-🧰 Prozesse verwalten
-| Befehl | Beschreibung |
-| ----------- | ----------- |
-|`ps aux`	|Alle Prozesse anzeigen|
-|`kill <pid>`	|Prozess beenden|
-|`kill -9 <pid>`|	Erzwingen|
-|`pkill <name>`	|Prozesse nach Name beenden|
----
-📜 Archivierung & Kompression
-| Befehl | Beschreibung |
-| ----------- | ----------- |
-|`tar -cvf archiv.tar <ordner>`|	Archiv erstellen|
-|`tar -xvf archiv.tar`	|Archiv entpacken|
-|`tar -czvf archiv.tar.gz <ordner>`|	Komprimieren|
-|`unzip <datei.zip>`	|ZIP entpacken|
+This page provides a structured overview of the most important Linux commands you can use in your daily Ubuntu work.
+
 ---
 
-:::tip[My tip]
+## 📁 File and Directory Management
 
-> Mit `Tab` kannst du Befehle und Pfade automatisch vervollständigen
+| Command | Description |
+| ----------- | ----------- |
+| `ls`|	Lists files and directories |
+| `cd <directory>`|	Changes the directory |
+| `pwd`|	Shows current directory |
+| `mkdir <name>`|	Creates a new directory |
+| `rmdir <name>`|	Removes empty directory |
+| `rm <file>`|	Deletes file |
+| `cp <source> <target>`|	Copies files/folders |
+| `mv <source> <target>`|	Moves or renames |
+
+### Flags & Details
+
+<details>
+<summary><strong>ls</strong> — Lists files and directories</summary>
+
+* `ls -l` → Detailed view
+  * Example: `ls -l` → shows file sizes, permissions, owner
+
+* `ls -a` → Show hidden files
+  * Example: `ls -a` → shows `.git`, `.env`
+
+* `ls -lh` → Readable sizes
+  * Example: `ls -lh` → 1K, 234M instead of bytes
+
+</details>
+
+<details>
+<summary><strong>cd</strong> — Changes directory</summary>
+
+* `cd ..` → Go one level up
+  * Example: `cd ..` → from `/home/user/docs` to `/home/user`
+
+* `cd ~` → Home directory
+  * Example: `cd ~` → `/home/user`
+
+* `cd -` → Previous directory
+  * Example: `cd -` → back to previous folder
+
+</details>
+
+<details>
+<summary><strong>mkdir</strong> — Creates directories</summary>
+
+* `mkdir -p` → Creates nested folders
+  * Example: `mkdir -p new_folder/demo` → Path: `/home/user/new_folder/demo`
+
+</details>
+
+<details>
+<summary><strong>rm</strong> — Deletes files and folders</summary>
+
+* `rm -r` → Recursive
+  * Example: `rm -r folder` → deletes entire folder
+
+* `rm -f` → Force
+  * Example: `rm -f file.txt` → delete without confirmation
+
+</details>
+
+<details>
+<summary><strong>cp</strong> — Copies files</summary>
+
+* `cp -r` → Copy folder
+  * Example: `cp -r src backup` → copies entire folder
+
+</details>
+
+<details>
+<summary><strong>mv</strong> — Moves or renames</summary>
+
+* `mv file.txt new.txt` → Rename
+  * Path: `/home/user/new.txt`
+
+* `mv file.txt folder/` → Move
+  * Path: `/home/user/folder/file.txt`
+
+</details>
+
+---
+
+## 📄 View and Edit File Contents
+
+| Command | Description |
+| ----------- | ----------- |
+|`cat <file>`	| Shows entire file content|
+|`less <file>`	| Scrollable view|
+|`head <file>`	| Show first lines|
+|`tail <file>`	| Show last lines|
+|`nano <file>`	| Simple editor|
+|`vim <file>`	| Advanced editor|
+
+### Flags & Details
+
+<details>
+<summary><strong>cat</strong> — Shows file content</summary>
+
+* `cat -n` → Line numbers
+  * Example: `cat -n file.txt`
+
+</details>
+
+<details>
+<summary><strong>less</strong> — Scrollable view</summary>
+
+* `less file.txt` → Scroll with arrow keys
+
+</details>
+
+<details>
+<summary><strong>tail</strong> — Show last lines</summary>
+
+* `tail -f` → Live logs
+  * Example: `tail -f app.log`
+
+</details>
+
+<details>
+<summary><strong>head</strong> — Show first lines</summary>
+
+* `head <file>` → First 10 lines
+  * Example: `head file.txt`
+
+* `head -n 20 <file>` → First 20 lines
+  * Example: `head -n 20 file.txt`
+
+</details>
+
+## 🔍 Search & Filter
+
+| Command | Description |
+| ----------- | ----------- |
+|`find <path> -name <name>`	|Search files|
+|`grep <pattern> <file>`	|Search text in file|
+|`grep -r <pattern> .`	|Recursive search|
+|`locate <name>`	|Fast file search|
+|`which <command>`	|Path of a command|
+
+### Flags & Details
+
+<details>
+<summary><strong>grep</strong> — Search for text patterns</summary>
+
+* `grep -r` → Recursive
+  * Example: `grep -r "test" .`
+
+* `grep -i` → Case insensitive
+  * Example: `grep -i "error" log.txt`
+
+</details>
+
+<details>
+<summary><strong>find</strong> — Search files</summary>
+
+* `find . -name file.txt`
+  * Example: searches for file in current folder
+
+</details>
+
+## ⚙️ System Information
+
+| Command | Description |
+| ----------- | ----------- |
+|`uname -a`	|System information|
+|`htop`	|Interactive process overview|
+|`top`	|Process list|
+|`df -h`|	Show disk space|
+|`du -sh <folder>`	|Show folder size|
+|`free -h`	|RAM usage|
+
+### Flags & Details
+
+<details>
+<summary><strong>df</strong> — Show disk space</summary>
+
+* `df -h` → Readable sizes
+  * Example: `df -h`
+
+</details>
+
+<details>
+<summary><strong>free</strong> — RAM usage</summary>
+
+* `free -h` → Readable RAM
+  * Example: `free -h`
+
+</details>
+
+<details>
+<summary><strong>top</strong> — Process list in real-time</summary>
+
+* `top` → Shows running processes
+  * Example: `top`
+
+* Exit with `q`
+
+</details>
+
+<details>
+<summary><strong>htop</strong> — Improved process overview</summary>
+
+* `htop` → Interactive process overview
+  * Example: `htop`
+
+* More user-friendly than `top`
+
+</details>
+
+<details>
+<summary><strong>uname</strong> — System information</summary>
+
+* `uname -a` → All system information
+  * Example: `uname -a` → shows kernel, version, architecture
+
+</details>
+
+<details>
+<summary><strong>du</strong> — Calculate folder size</summary>
+
+* `du -sh <folder>` → Readable total size
+  * Example: `du -sh /home/user` → shows e.g. "5.2G"
+
+</details>
+
+## 🔐 Users & Permissions
+
+| Command | Description |
+| ----------- | ----------- |
+|`whoami`	|Current user|
+|`id`	|Show user ID|
+|`chmod +x <file>`|	Make file executable|
+|`chmod 755 <file>`|	Set permissions|
+|`chown user:group <file>`|	Change owner|
+|`sudo <command>`|	Run command as administrator|
+
+### Flags & Details
+
+<details>
+<summary><strong>chmod</strong> — Changes file permissions</summary>
+
+* `chmod +x script.sh` → executable
+
+* `chmod 755 file` → Standard permissions
+
+</details>
+
+<details>
+<summary><strong>chown</strong> — Changes owner</summary>
+
+* `chown user:group file` → Change owner
+
+</details>
+
+## 📦 Package Management (APT)
+
+| Command | Description |
+| ----------- | ----------- |
+|`sudo apt update`	|Update package list|
+|`sudo apt upgrade`	|Upgrade packages|
+|`sudo apt install <package>`	|Install package|
+|`sudo apt remove <package>`	|Remove package|
+|`apt search <package>`	|Search package|
+
+### Flags & Details
+
+<details>
+<summary><strong>apt</strong> — Package management</summary>
+
+* `apt update` → Update package list
+* `apt install nginx` → Install package
+
+</details>
+
+## 🌐 Network
+
+| Command | Description |
+| ----------- | ----------- |
+|`ping <host>`	|Test network connection|
+|`ip a`	|Show IP addresses|
+|`curl <url>`	|Send HTTP request|
+|`wget <url>`	|Download file|
+|`netstat -tuln`|	Show open ports|
+
+### Flags & Details
+
+<details>
+<summary><strong>ping</strong> — Test network connection</summary>
+
+* `ping -c 4 google.com` → 4 requests
+
+</details>
+
+<details>
+<summary><strong>curl</strong> — HTTP requests</summary>
+
+* `curl -O file.url` → Save file
+
+</details>
+
+<details>
+<summary><strong>wget</strong> — Download file</summary>
+
+* `wget <url>` → Download URL
+  * Example: `wget https://example.com/file.zip`
+
+</details>
+
+## 🧰 Process Management
+
+| Command | Description |
+| ----------- | ----------- |
+|`ps aux`	|Show all processes|
+|`kill <pid>`	|Kill process|
+|`kill -9 <pid>`|	Force kill|
+|`pkill <name>`	|Kill processes by name|
+
+### Flags & Details
+
+<details>
+<summary><strong>ps</strong> — Show processes</summary>
+
+* `ps aux` → All processes
+
+</details>
+
+<details>
+<summary><strong>kill</strong> — Kill processes</summary>
+
+* `kill -9 1234` → Force kill process
+
+</details>
+
+## 📜 Archiving & Compression
+
+| Command | Description |
+| ----------- | ----------- |
+|`tar -cvf archive.tar <folder>`|	Create archive|
+|`tar -xvf archive.tar`	|Extract archive|
+|`tar -czvf archive.tar.gz <folder>`|	Compress|
+|`unzip <file.zip>`	|Extract ZIP|
+
+### Flags & Details
+
+<details>
+<summary><strong>tar</strong> — Archiving and compression</summary>
+
+* `tar -czvf file.tar.gz folder` → compress
+
+* `tar -xvf file.tar` → extract
+
+</details>
+
+## 📚 Further Reading
+
+:::tip[Tips]
+
+You can automatically complete commands and paths with `Tab`
 
 :::
 
----
-📚 Weiterführend
-`man <befehl>` zeigt die Dokumentation eines Befehls
-`--help` liefert eine kurze Hilfe
----
+- `man <command>` shows documentation for a command
+- `--help` provides quick help
+
+> Fully compatible with Docusaurus (MDX + TSX) ✅

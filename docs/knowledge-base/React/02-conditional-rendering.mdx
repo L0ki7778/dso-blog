@@ -1,0 +1,232 @@
+---
+title: Conditional Rendering
+description: Learn how to conditionally render content in React components
+---
+
+# Conditional Rendering
+
+Conditional rendering in React allows you to render different components or content based on certain conditions. This is a fundamental pattern for building dynamic user interfaces.
+
+## If/Else Statements
+
+The simplest way to handle conditional rendering is using JavaScript if/else statements:
+
+```jsx
+function Greeting({ isLoggedIn }) {
+  if (isLoggedIn) {
+    return <h1>Welcome back!</h1>;
+  } else {
+    return <h1>Please sign in.</h1>;
+  }
+}
+```
+
+## Ternary Operator
+
+For inline conditional rendering, use the ternary operator:
+
+```jsx
+function Greeting({ isLoggedIn }) {
+  return (
+    <div>
+      {isLoggedIn ? <h1>Welcome back!</h1> : <h1>Please sign in.</h1>}
+    </div>
+  );
+}
+
+// Usage
+<Greeting isLoggedIn={true} />  // Renders: Welcome back!
+<Greeting isLoggedIn={false} /> // Renders: Please sign in.
+```
+
+## Logical AND (&&) Operator
+
+Use the `&&` operator to render a component only if a condition is true:
+
+```jsx
+function Notification({ hasUnread }) {
+  return (
+    <div>
+      <h1>Messages</h1>
+      {hasUnread && <p className="alert">You have unread messages!</p>}
+    </div>
+  );
+}
+
+// Usage
+<Notification hasUnread={true} />  // Shows alert
+<Notification hasUnread={false} /> // Hides alert
+```
+
+## Switch Statements
+
+For multiple conditions, a switch statement can be cleaner:
+
+```jsx
+function Status({ status }) {
+  switch(status) {
+    case 'pending':
+      return <p>Loading...</p>;
+    case 'success':
+      return <p>Success!</p>;
+    case 'error':
+      return <p>Something went wrong.</p>;
+    default:
+      return <p>Unknown status</p>;
+  }
+}
+
+// Usage
+<Status status="pending" />  // Renders: Loading...
+<Status status="success" />  // Renders: Success!
+<Status status="error" />    // Renders: Something went wrong.
+```
+
+## Element Variables
+
+You can assign JSX to variables and render them conditionally:
+
+```jsx
+function Dashboard({ userRole }) {
+  let content;
+
+  if (userRole === 'admin') {
+    content = <AdminPanel />;
+  } else if (userRole === 'user') {
+    content = <UserPanel />;
+  } else {
+    content = <GuestPanel />;
+  }
+
+  return (
+    <div>
+      <header>Dashboard</header>
+      {content}
+    </div>
+  );
+}
+```
+
+## Conditional CSS Classes
+
+Render different styles based on conditions:
+
+```jsx
+function Button({ isActive, isDisabled }) {
+  const className = `btn ${isActive ? 'btn-active' : ''} ${isDisabled ? 'btn-disabled' : ''}`;
+  
+  return (
+    <button className={className} disabled={isDisabled}>
+      Click me
+    </button>
+  );
+}
+```
+
+## Conditional Rendering with Multiple Elements
+
+Handle multiple elements in conditional logic:
+
+```jsx
+function UserProfile({ user }) {
+  if (!user) {
+    return (
+      <div>
+        <h1>No user selected</h1>
+        <p>Select a user to view their profile</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="profile">
+      <h1>{user.name}</h1>
+      <p>Email: {user.email}</p>
+      <p>Status: {user.isActive ? 'Active' : 'Inactive'}</p>
+    </div>
+  );
+}
+```
+
+## Showing/Hiding Content with Conditions
+
+```jsx
+function ExpandableSection({ title, isOpen }) {
+  return (
+    <div>
+      <h2>{title}</h2>
+      {isOpen && (
+        <div className="content">
+          <p>This content is only shown when isOpen is true.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Usage
+<ExpandableSection title="Settings" isOpen={true} />
+<ExpandableSection title="Help" isOpen={false} />
+```
+
+## Preventing Component Rendering
+
+Return `null` to render nothing:
+
+```jsx
+function Alert({ message, type }) {
+  if (type === 'hidden') {
+    return null; // Component renders nothing
+  }
+
+  const alertClass = `alert alert-${type}`;
+  return <div className={alertClass}>{message}</div>;
+}
+
+// Usage
+<Alert message="An error occurred!" type="error" />    // Shows alert
+<Alert message="Hidden alert" type="hidden" />         // Renders nothing
+```
+
+## Complex Conditional Example
+
+```jsx
+function Product({ product, isInCart, isLoading }) {
+  if (isLoading) {
+    return <div>Loading product...</div>;
+  }
+
+  if (!product) {
+    return <div>Product not found</div>;
+  }
+
+  return (
+    <div className="product">
+      <h2>{product.name}</h2>
+      <p>${product.price}</p>
+      <p>{product.description}</p>
+      
+      {isInCart ? (
+        <button>Remove from Cart</button>
+      ) : (
+        <button>Add to Cart</button>
+      )}
+      
+      {product.onSale && <span className="badge">On Sale!</span>}
+      {product.stock === 0 && <p className="out-of-stock">Out of Stock</p>}
+    </div>
+  );
+}
+```
+
+## Best Practices
+
+1. **Keep it simple** - Avoid deeply nested ternary operators
+2. **Use meaningful names** - Use clear variable names for boolean conditions
+3. **Consider readability** - Sometimes if/else is clearer than ternary operators
+4. **Extract components** - Move complex conditional logic into separate components
+5. **Use constants** - Define status/type constants instead of hardcoding strings
+
+## Summary
+
+Conditional rendering is essential for building dynamic React applications. Choose the approach that best fits your use case: if/else for simple cases, ternary operators for inline single conditions, `&&` for showing/hiding elements, and switch statements for multiple conditions.

@@ -1,0 +1,484 @@
+---
+title: Routing in React
+description: Learn how to implement client-side routing in React using React Router
+---
+
+# Routing in React
+
+Routing allows you to navigate between different views or pages in a single-page application (SPA) without reloading the entire page. React Router is the most popular routing library for React.
+
+## Introduction to React Router
+
+React Router allows you to:
+- Create multiple "pages" in a single-page app
+- Navigate between pages without full page reloads
+- Handle URL parameters and query strings
+- Implement nested routes
+- Manage browser history
+
+## Installation
+
+Install React Router using npm or pnpm:
+
+```bash
+npm install react-router-dom
+# or
+pnpm add react-router-dom
+```
+
+## Basic Setup
+
+Create a basic routing structure:
+
+```jsx
+import React from 'react';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+import Contact from './pages/Contact';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+        <Link to="/contact">Contact</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+## Route Components
+
+Create simple page components:
+
+```jsx
+// Home.jsx
+function Home() {
+  return (
+    <div>
+      <h1>Welcome Home</h1>
+      <p>This is the home page.</p>
+    </div>
+  );
+}
+
+export default Home;
+```
+
+```jsx
+// About.jsx
+function About() {
+  return (
+    <div>
+      <h1>About Us</h1>
+      <p>Learn more about our company.</p>
+    </div>
+  );
+}
+
+export default About;
+```
+
+## URL Parameters
+
+Handle dynamic routes with URL parameters:
+
+```jsx
+import { useParams } from 'react-router-dom';
+
+function UserProfile() {
+  const { userId } = useParams();
+
+  return (
+    <div>
+      <h1>User Profile</h1>
+      <p>User ID: {userId}</p>
+    </div>
+  );
+}
+
+export default UserProfile;
+```
+
+Use in your routing:
+
+```jsx
+<Routes>
+  <Route path="/user/:userId" element={<UserProfile />} />
+</Routes>
+```
+
+Access different user profiles:
+- `/user/1`
+- `/user/2`
+- `/user/john`
+
+## Query Parameters
+
+Handle query strings in URLs:
+
+```jsx
+import { useSearchParams } from 'react-router-dom';
+
+function Products() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const category = searchParams.get('category');
+  const sort = searchParams.get('sort') || 'asc';
+
+  return (
+    <div>
+      <h1>Products</h1>
+      <p>Category: {category || 'All'}</p>
+      <p>Sort: {sort}</p>
+
+      <button onClick={() => setSearchParams({ category: 'electronics', sort: 'desc' })}>
+        Filter Electronics
+      </button>
+    </div>
+  );
+}
+
+export default Products;
+```
+
+Access URLs like:
+- `/products?category=electronics&sort=asc`
+- `/products?category=books`
+
+## Navigation with useNavigate
+
+Programmatically navigate between pages:
+
+```jsx
+import { useNavigate } from 'react-router-dom';
+
+function LoginForm() {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    // Validate and login
+    console.log('User logged in');
+    navigate('/dashboard'); // Navigate to dashboard
+  };
+
+  return (
+    <div>
+      <h1>Login</h1>
+      <button onClick={handleLogin}>Login</button>
+    </div>
+  );
+}
+
+export default LoginForm;
+```
+
+Navigate with parameters:
+
+```jsx
+const handleSubmit = (userData) => {
+  navigate(`/profile/${userData.id}`);
+};
+```
+
+Or navigate backward:
+
+```jsx
+const handleBack = () => {
+  navigate(-1); // Go back one page
+};
+```
+
+## Nested Routes
+
+Create nested route structures:
+
+```jsx
+import { Outlet } from 'react-router-dom';
+
+function Dashboard() {
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      <nav>
+        <Link to="overview">Overview</Link>
+        <Link to="analytics">Analytics</Link>
+        <Link to="settings">Settings</Link>
+      </nav>
+      <Outlet /> {/* Renders child routes here */}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/dashboard" element={<Dashboard />}>
+          <Route path="overview" element={<Overview />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+## Lazy Loading Routes
+
+Load route components only when needed:
+
+```jsx
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  );
+}
+```
+
+## Protected Routes
+
+Create routes that require authentication:
+
+```jsx
+import { Navigate } from 'react-router-dom';
+
+function ProtectedRoute({ isAuthenticated, element }) {
+  return isAuthenticated ? element : <Navigate to="/login" />;
+}
+
+function App() {
+  const isAuthenticated = !!localStorage.getItem('authToken');
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={<ProtectedRoute isAuthenticated={isAuthenticated} element={<Dashboard />} />}
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+## 404 Not Found Page
+
+Handle undefined routes:
+
+```jsx
+function NotFound() {
+  return (
+    <div>
+      <h1>404 - Page Not Found</h1>
+      <p>The page you're looking for doesn't exist.</p>
+      <Link to="/">Go Home</Link>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+## Navigation Links
+
+Use different link types:
+
+```jsx
+import { Link, NavLink } from 'react-router-dom';
+
+function Navigation() {
+  return (
+    <nav>
+      {/* Standard link */}
+      <Link to="/">Home</Link>
+
+      {/* NavLink highlights when active */}
+      <NavLink 
+        to="/about"
+        className={({ isActive }) => isActive ? 'active' : ''}
+      >
+        About
+      </NavLink>
+
+      {/* With trailing slash */}
+      <Link to="/products/">Products</Link>
+    </nav>
+  );
+}
+```
+
+## Complete Routing Example
+
+A complete example with multiple features:
+
+```jsx
+import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route, Link, useParams, useNavigate } from 'react-router-dom';
+
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  return (
+    <BrowserRouter>
+      <header>
+        <nav>
+          <Link to="/">Home</Link>
+          <Link to="/products">Products</Link>
+          {isLoggedIn ? (
+            <>
+              <Link to="/dashboard">Dashboard</Link>
+              <button onClick={() => setIsLoggedIn(false)}>Logout</button>
+            </>
+          ) : (
+            <Link to="/login">Login</Link>
+          )}
+        </nav>
+      </header>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/login" element={<Login onLogin={() => setIsLoggedIn(true)} />} />
+        <Route 
+          path="/dashboard" 
+          element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} 
+        />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+function Home() {
+  return <h1>Welcome to the Home Page</h1>;
+}
+
+function Products() {
+  const products = [
+    { id: 1, name: 'Product 1' },
+    { id: 2, name: 'Product 2' },
+    { id: 3, name: 'Product 3' }
+  ];
+
+  return (
+    <div>
+      <h1>Products</h1>
+      <ul>
+        {products.map(product => (
+          <li key={product.id}>
+            <Link to={`/product/${product.id}`}>{product.name}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ProductDetail() {
+  const { id } = useParams();
+
+  return (
+    <div>
+      <h1>Product {id}</h1>
+      <p>This is the detail page for product {id}</p>
+      <Link to="/products">Back to Products</Link>
+    </div>
+  );
+}
+
+function Login({ onLogin }) {
+  const navigate = useNavigate();
+
+  const handleSubmit = () => {
+    onLogin();
+    navigate('/dashboard');
+  };
+
+  return (
+    <div>
+      <h1>Login</h1>
+      <button onClick={handleSubmit}>Login</button>
+    </div>
+  );
+}
+
+function Dashboard() {
+  return <h1>Dashboard</h1>;
+}
+
+function NotFound() {
+  return (
+    <div>
+      <h1>404 - Page Not Found</h1>
+      <Link to="/">Go Home</Link>
+    </div>
+  );
+}
+
+export default App;
+```
+
+## Best Practices
+
+1. **Use absolute imports** - Import from root to avoid relative paths
+2. **Organize routes** - Group related routes together
+3. **Lazy load large components** - Use React.lazy() for code splitting
+4. **Handle 404s** - Always include a catch-all route
+5. **Protect sensitive routes** - Use authentication checks for protected pages
+6. **Use meaningful URLs** - Make URLs descriptive and user-friendly
+7. **Handle loading states** - Show loading spinners for lazy-loaded components
+8. **Implement breadcrumbs** - Help users navigate nested routes
+
+## Common Patterns
+
+| Pattern | Use Case |
+|---|---|
+| `/page/:id` | View specific item details |
+| `/search?q=keyword` | Search or filter results |
+| `/dashboard/*` | Nested admin sections |
+| `/login` | Authentication pages |
+| `*` | 404 catch-all route |
+
+## Summary
+
+React Router enables you to build complex, multi-page applications as single-page apps. Master the fundamentals of routes, parameters, navigation, and nested routes to build sophisticated routing structures.

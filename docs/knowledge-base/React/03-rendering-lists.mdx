@@ -1,0 +1,340 @@
+---
+title: Rendering Lists in React
+description: Learn how to efficiently render lists in React using the map() function
+---
+
+# Rendering Lists in React
+
+Rendering lists is one of the most common tasks in React. The primary way to render lists is using the `.map()` function to transform an array of data into an array of elements.
+
+## Basic List Rendering
+
+The simplest way to render a list is by mapping over an array:
+
+```jsx
+function FruitList() {
+  const fruits = ['Apple', 'Banana', 'Orange', 'Mango'];
+
+  return (
+    <ul>
+      {fruits.map((fruit, index) => (
+        <li key={index}>{fruit}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+**Output:**
+```
+- Apple
+- Banana
+- Orange
+- Mango
+```
+
+## Using Unique Keys
+
+Always use a unique identifier as the `key` prop, not the array index (unless the list is static):
+
+```jsx
+function UserList({ users }) {
+  return (
+    <ul>
+      {users.map((user) => (
+        <li key={user.id}>
+          {user.name} - {user.email}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// Example data
+const users = [
+  { id: 1, name: 'Alice', email: 'alice@example.com' },
+  { id: 2, name: 'Bob', email: 'bob@example.com' },
+  { id: 3, name: 'Carol', email: 'carol@example.com' }
+];
+
+// Usage
+<UserList users={users} />
+```
+
+## Rendering with Objects
+
+When working with objects in an array:
+
+```jsx
+function ProductList({ products }) {
+  return (
+    <div className="product-grid">
+      {products.map((product) => (
+        <div key={product.id} className="product-card">
+          <h3>{product.name}</h3>
+          <p>${product.price}</p>
+          <p>{product.description}</p>
+          <button>Add to Cart</button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Example data
+const products = [
+  { id: 1, name: 'Laptop', price: 999, description: 'High-performance laptop' },
+  { id: 2, name: 'Mouse', price: 29, description: 'Wireless mouse' },
+  { id: 3, name: 'Keyboard', price: 79, description: 'Mechanical keyboard' }
+];
+```
+
+## Extracting List Item Component
+
+For better code organization, extract the list item into its own component:
+
+```jsx
+function TodoItem({ todo, onToggle, onDelete }) {
+  return (
+    <li className={todo.completed ? 'completed' : ''}>
+      <input 
+        type="checkbox" 
+        checked={todo.completed}
+        onChange={() => onToggle(todo.id)}
+      />
+      <span>{todo.text}</span>
+      <button onClick={() => onDelete(todo.id)}>Delete</button>
+    </li>
+  );
+}
+
+function TodoList({ todos, onToggle, onDelete }) {
+  return (
+    <ul>
+      {todos.map((todo) => (
+        <TodoItem 
+          key={todo.id} 
+          todo={todo}
+          onToggle={onToggle}
+          onDelete={onDelete}
+        />
+      ))}
+    </ul>
+  );
+}
+```
+
+## Filtering and Mapping
+
+Combine filtering with mapping to display specific items:
+
+```jsx
+function CompletedTodoList({ todos }) {
+  return (
+    <ul>
+      {todos
+        .filter((todo) => todo.completed)
+        .map((todo) => (
+          <li key={todo.id}>{todo.text}</li>
+        ))}
+    </ul>
+  );
+}
+
+// Example data
+const todos = [
+  { id: 1, text: 'Learn React', completed: true },
+  { id: 2, text: 'Build a project', completed: false },
+  { id: 3, text: 'Master hooks', completed: true }
+];
+```
+
+## Sorting Lists
+
+Sort data before rendering:
+
+```jsx
+function SortedUserList({ users }) {
+  const sortedUsers = [...users].sort((a, b) => 
+    a.name.localeCompare(b.name)
+  );
+
+  return (
+    <ul>
+      {sortedUsers.map((user) => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+## Nested Lists
+
+Render lists within lists:
+
+```jsx
+function CategoryList({ categories }) {
+  return (
+    <div>
+      {categories.map((category) => (
+        <div key={category.id}>
+          <h2>{category.name}</h2>
+          <ul>
+            {category.items.map((item) => (
+              <li key={item.id}>{item.name}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Example data
+const categories = [
+  {
+    id: 1,
+    name: 'Fruits',
+    items: [
+      { id: 1, name: 'Apple' },
+      { id: 2, name: 'Banana' }
+    ]
+  },
+  {
+    id: 2,
+    name: 'Vegetables',
+    items: [
+      { id: 3, name: 'Carrot' },
+      { id: 4, name: 'Broccoli' }
+    ]
+  }
+];
+```
+
+## Rendering with Index with Objects
+
+Access both the value and index when needed:
+
+```jsx
+function RankedList({ items }) {
+  return (
+    <ol>
+      {items.map((item, index) => (
+        <li key={item.id}>
+          #{index + 1} - {item.name} ({item.points} points)
+        </li>
+      ))}
+    </ol>
+  );
+}
+```
+
+## Empty List Handling
+
+Handle empty states gracefully:
+
+```jsx
+function ItemList({ items }) {
+  if (items.length === 0) {
+    return <p>No items found. Start by adding one!</p>;
+  }
+
+  return (
+    <ul>
+      {items.map((item) => (
+        <li key={item.id}>{item.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+## Conditional Rendering in Lists
+
+Render different content based on conditions:
+
+```jsx
+function UserList({ users }) {
+  return (
+    <ul>
+      {users.map((user) => (
+        <li key={user.id}>
+          {user.name}
+          {user.isAdmin && <span className="badge">Admin</span>}
+          {!user.isActive && <span className="badge">Inactive</span>}
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
+
+## Why Keys are Important
+
+Keys help React identify which items have changed, been added, or removed:
+
+```jsx
+// ✅ GOOD - Using unique identifier
+<li key={user.id}>{user.name}</li>
+
+// ✅ ACCEPTABLE - Only if list is static
+<li key={index}>{fruit}</li>
+
+// ❌ BAD - Keys should not change
+// Don't use: key={Math.random()}
+// Don't use: key={`item-${Math.random()}`}
+```
+
+Without proper keys, React may:
+- Not update components correctly
+- Lose component state
+- Have poor performance
+- Cause bugs when items are reordered or filtered
+
+## Complete Example
+
+```jsx
+function Dashboard({ searchTerm, filterType }) {
+  const allUsers = [
+    { id: 1, name: 'Alice', type: 'admin', status: 'active' },
+    { id: 2, name: 'Bob', type: 'user', status: 'active' },
+    { id: 3, name: 'Carol', type: 'user', status: 'inactive' },
+    { id: 4, name: 'David', type: 'admin', status: 'active' }
+  ];
+
+  const filteredUsers = allUsers
+    .filter(user => user.type === filterType)
+    .filter(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  if (filteredUsers.length === 0) {
+    return <p>No users found matching your criteria.</p>;
+  }
+
+  return (
+    <div className="user-list">
+      {filteredUsers.map((user) => (
+        <div key={user.id} className={`user-card ${user.status}`}>
+          <h3>{user.name}</h3>
+          <p>Type: {user.type}</p>
+          <p>Status: {user.status}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+## Best Practices
+
+1. **Always use a key prop** - Preferably a unique identifier, not array index
+2. **Extract list items** - Move complex list item rendering to separate components
+3. **Filter/sort before mapping** - Keep your map function focused on rendering
+4. **Handle empty states** - Show appropriate messages when lists are empty
+5. **Avoid inline arrow functions** - Define handlers outside of the map for better performance
+6. **Keep list items simple** - Complex items should be their own components
+
+## Summary
+
+List rendering in React is straightforward using the `.map()` function. The key to effective list rendering is using proper keys, extracting list item components, and handling edge cases like empty states.

@@ -1,0 +1,216 @@
+---
+id: basic-features
+slug: /basic-features
+title: Working with Data in React
+description: Learn how to pass props from parent to child components in React
+---
+
+# Working with Data in React
+
+In React, data flows from parent components to child components through **props** (properties). This concept is fundamental to building React applications.
+
+## Understanding Props
+
+Props are arguments passed into React components. They are single values or objects containing a set of values that are passed to a component similar to function parameters.
+
+### Key Characteristics of Props
+
+- **Read-only**: Props cannot be modified by the child component
+- **Passed from parent to child**: Props flow downward
+- **Used for data communication**: Props allow parent and child components to communicate
+
+## Basic Props Example
+
+### Parent Component
+
+```jsx
+import React from 'react';
+import Welcome from './Welcome';
+
+function App() {
+  return (
+    <div>
+      <Welcome name="Alice" age={25} />
+      <Welcome name="Bob" age={30} />
+      <Welcome name="Carol" age={28} />
+    </div>
+  );
+}
+
+export default App;
+```
+
+### Child Component
+
+```jsx
+import React from 'react';
+
+function Welcome(props) {
+  return (
+    <div>
+      <h1>Hello, {props.name}!</h1>
+      <p>You are {props.age} years old.</p>
+    </div>
+  );
+}
+
+export default Welcome;
+```
+
+## Destructuring Props
+
+Instead of accessing props through the `props` object, you can destructure them directly in the function parameters:
+
+```jsx
+function Welcome({ name, age }) {
+  return (
+    <div>
+      <h1>Hello, {name}!</h1>
+      <p>You are {age} years old.</p>
+    </div>
+  );
+}
+
+export default Welcome;
+```
+
+## Passing Objects as Props
+
+You can pass complex objects as props:
+
+```jsx
+// Parent Component
+function App() {
+  const user = {
+    id: 1,
+    name: 'John Doe',
+    email: 'john@example.com',
+    location: 'New York'
+  };
+
+  return <UserCard user={user} />;
+}
+
+// Child Component
+function UserCard({ user }) {
+  return (
+    <div className="card">
+      <h2>{user.name}</h2>
+      <p>Email: {user.email}</p>
+      <p>Location: {user.location}</p>
+    </div>
+  );
+}
+```
+
+## Passing Functions as Props
+
+You can pass functions to child components, allowing them to communicate back to the parent:
+
+```jsx
+// Parent Component
+function App() {
+  const handleClick = (message) => {
+    console.log('Child says:', message);
+  };
+
+  return (
+    <div>
+      <Button onClick={handleClick} label="Click me!" />
+    </div>
+  );
+}
+
+// Child Component
+function Button({ onClick, label }) {
+  return (
+    <button onClick={() => onClick(label)}>
+      {label}
+    </button>
+  );
+}
+```
+
+## Default Props
+
+You can set default values for props using the `defaultProps` property:
+
+```jsx
+function Greeting({ name = 'Guest', greeting = 'Hello' }) {
+  return <h1>{greeting}, {name}!</h1>;
+}
+
+// Or using defaultProps
+function Greeting({ name, greeting }) {
+  return <h1>{greeting}, {name}!</h1>;
+}
+
+Greeting.defaultProps = {
+  name: 'Guest',
+  greeting: 'Hello'
+};
+```
+
+## Passing Multiple Children
+
+Use `props.children` to pass content between component tags:
+
+```jsx
+// Parent Component
+function App() {
+  return (
+    <Card>
+      <h2>My Card</h2>
+      <p>This is the card content</p>
+    </Card>
+  );
+}
+
+// Child Component
+function Card({ children }) {
+  return (
+    <div className="card">
+      {children}
+    </div>
+  );
+}
+```
+
+## Prop Drilling Example
+
+A complete example showing props flowing through multiple levels:
+
+```jsx
+// Grandparent Component
+function App() {
+  const theme = 'dark';
+  
+  return <Parent theme={theme} />;
+}
+
+// Parent Component
+function Parent({ theme }) {
+  return <Child theme={theme} />;
+}
+
+// Child Component
+function Child({ theme }) {
+  return (
+    <div className={`container ${theme}`}>
+      <p>Current theme: {theme}</p>
+    </div>
+  );
+}
+```
+
+## Best Practices
+
+1. **Keep props simple** - Avoid passing deeply nested objects
+2. **Use destructuring** - Makes code more readable
+3. **Avoid prop drilling** - Use Context API or state management for deeply nested components
+4. **Document props** - Use JSDoc comments to describe what props your component accepts
+5. **Validate props** - Consider using PropTypes for type checking
+
+## Summary
+
+Props are the primary way to pass data from parent to child components in React. They enable you to create reusable, flexible components that can work with different data. Understanding props is essential for building effective React applications.
