@@ -1,0 +1,110 @@
+---
+id: linux-befehle
+slug: /linux-befehle
+title: Linux Befehle (Ubuntu)
+description: Übersicht wichtiger Linux-Befehle für Ubuntu, nach Kategorien sortiert.
+Linux Befehle für Ubuntu
+Diese Seite bietet eine strukturierte Übersicht über die wichtigsten Linux-Befehle, die du im Alltag unter Ubuntu verwenden kannst.
+---
+
+
+📁 Datei- und Verzeichnisverwaltung
+| Befehl | Beschreibung |
+| ----------- | ----------- |
+| `ls`|	Listet Dateien und Verzeichnisse auf |
+| `ls -la`|	Detaillierte Ansicht inkl. versteckter Dateien |
+| `cd <verzeichnis>`|	Wechselt das Verzeichnis |
+| `pwd`|	Zeigt aktuelles Verzeichnis |
+| `mkdir <name>`|	Erstellt ein neues Verzeichnis |
+| `rmdir <name>`|	Löscht leeres Verzeichnis |
+| `rm <datei>`|	Löscht Datei |
+| `rm -r <ordner>`|	Löscht Ordner rekursiv |
+| `cp <quelle> <ziel>`|	Kopiert Dateien/Ordner |
+| `mv <quelle> <ziel>`|	Verschiebt oder benennt um |
+---
+📄 Dateiinhalte anzeigen & bearbeiten
+| Befehl | Beschreibung |
+| ----------- | ----------- |
+|`cat <datei>`	| Zeigt gesamten Dateiinhalt|
+|`less <datei>`	| Scrollbare Ansicht|
+|`head <datei>`	| Erste Zeilen anzeigen|
+|`tail <datei>`	| Letzte Zeilen anzeigen|
+|`tail -f <datei>`	| Live-Log anzeigen|
+|`nano <datei>`	| Einfacher Editor|
+|`vim <datei>`	| Erweiterter Editor|
+---
+🔍 Suche & Filter
+| Befehl | Beschreibung |
+| ----------- | ----------- |
+|`find <pfad> -name <name>`	|Sucht Dateien|
+|`grep <muster> <datei>`	|Sucht Text in Datei|
+|`grep -r <muster> .`	|Rekursive Suche|
+|`locate <name>`	|Schnelle Dateisuche|
+|`which <befehl>`	|Pfad eines Befehls|
+---
+⚙️ Systeminformationen
+| Befehl | Beschreibung |
+| ----------- | ----------- |
+|`uname -a`	|Systeminformationen|
+|`htop`	|Interaktive Prozessübersicht|
+|`top`	|Prozessliste|
+|`df -h`|	Speicherplatz anzeigen|
+|`du -sh <ordner>`	|Ordnergröße anzeigen|
+|`free -h`	|RAM-Auslastung|
+---
+🔐 Benutzer & Rechte
+| Befehl | Beschreibung |
+| ----------- | ----------- |
+|`whoami`	|Aktueller Benutzer|
+|`id`	|Benutzer-ID anzeigen|
+|`chmod +x <datei>`|	Datei ausführbar machen|
+|`chmod 755 <datei>`|	Rechte setzen|
+|`chown user:group <datei>`|	Besitzer ändern|
+|`sudo <befehl>`|	Befehl als Administrator ausführen|
+---
+📦 Paketverwaltung (APT)
+| Befehl | Beschreibung |
+| ----------- | ----------- |
+|`sudo apt update`	|Paketliste aktualisieren|
+|`sudo apt upgrade`	|Pakete aktualisieren|
+|`sudo apt install <paket>`	|Paket installieren|
+|`sudo apt remove <paket>`	|Paket entfernen|
+|`apt search <paket>`	|Paket suchen|
+---
+🌐 Netzwerk
+| Befehl | Beschreibung |
+| ----------- | ----------- |
+|`ping <host>`	|Netzwerkverbindung testen|
+|`ip a`	|IP-Adressen anzeigen|
+|`curl <url>`	|HTTP-Anfrage senden|
+|`wget <url>`	|Datei herunterladen|
+|`netstat -tuln`|	Offene Ports anzeigen|
+---
+🧰 Prozesse verwalten
+| Befehl | Beschreibung |
+| ----------- | ----------- |
+|`ps aux`	|Alle Prozesse anzeigen|
+|`kill <pid>`	|Prozess beenden|
+|`kill -9 <pid>`|	Erzwingen|
+|`pkill <name>`	|Prozesse nach Name beenden|
+---
+📜 Archivierung & Kompression
+| Befehl | Beschreibung |
+| ----------- | ----------- |
+|`tar -cvf archiv.tar <ordner>`|	Archiv erstellen|
+|`tar -xvf archiv.tar`	|Archiv entpacken|
+|`tar -czvf archiv.tar.gz <ordner>`|	Komprimieren|
+|`unzip <datei.zip>`	|ZIP entpacken|
+---
+
+:::tip[My tip]
+
+> Mit `Tab` kannst du Befehle und Pfade automatisch vervollständigen
+
+:::
+
+---
+📚 Weiterführend
+`man <befehl>` zeigt die Dokumentation eines Befehls
+`--help` liefert eine kurze Hilfe
+---
