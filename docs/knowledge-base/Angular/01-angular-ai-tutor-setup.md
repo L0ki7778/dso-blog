@@ -10,7 +10,7 @@
 ## Installation & Setup Steps
 
 ### Step 1: Install Gemini CLI
-```bash
+```bash title="Bash"
 npm install -g @google/gemini-cli
 ```
 
@@ -18,7 +18,7 @@ npm install -g @google/gemini-cli
 In your **Angular project root**, create a file: `.gemini/settings.json`
 
 Add this content:
-```json
+```json title="json"
 {
   "mcpServers": {
     "angular-cli": {
@@ -30,18 +30,18 @@ Add this content:
 ```
 
 ### Step 3: Navigate to Your Project
-```bash
+```bash title="Bash"
 cd <your-angular-project-folder>
 ```
 
 ### Step 4: Launch Gemini CLI
-```bash
+```bash title="Bash"
 gemini
 ```
 
 ### Step 5: Start the AI Tutor
 In the Gemini CLI prompt, type:
-```
+```gemini title="Gemini CLI"
 launch the Angular AI tutor
 ```
 
