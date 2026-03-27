@@ -1,0 +1,437 @@
+---
+id: ssh-generation
+slug: /ssh-generation
+title: SSH Key Generation
+description: Step-by-step tutorials for generating and saving SSH keys in PowerShell, Command Prompt, and Bash.
+---
+
+# SSH Key Generation
+
+Learn how to generate and save SSH keys in different shells: PowerShell (Windows), Command Prompt (Windows), and Bash (Linux/Mac).
+
+---
+
+## 🔑 PowerShell (Windows)
+
+### Quick Start
+
+Generate an SSH key pair using PowerShell:
+
+```powershell
+ssh-keygen -t rsa -b 4096 -f "$env:USERPROFILE\.ssh\id_rsa" -N ""
+```
+
+### Step-by-Step Tutorial
+
+<details>
+<summary><strong>Step 1: Open PowerShell</strong></summary>
+
+1. Press `Win + X`
+2. Select **Windows PowerShell (Admin)** or **Terminal (Admin)**
+3. You should see a prompt ending with `>`
+
+</details>
+
+<details>
+<summary><strong>Step 2: Create .ssh Directory</strong></summary>
+
+Create the `.ssh` folder in your user home directory:
+
+```powershell
+if (-not (Test-Path "$env:USERPROFILE\.ssh")) {
+    New-Item -ItemType Directory -Path "$env:USERPROFILE\.ssh" -Force
+}
+```
+
+**Explanation:**
+- `$env:USERPROFILE` → Your Windows user directory (e.g., `C:\Users\YourName`)
+- `Test-Path` → Checks if the directory exists
+- `New-Item` → Creates a new directory if it doesn't exist
+
+</details>
+
+<details>
+<summary><strong>Step 3: Generate SSH Key</strong></summary>
+
+Generate your SSH key:
+
+```powershell
+ssh-keygen -t rsa -b 4096 -f "$env:USERPROFILE\.ssh\id_rsa" -N ""
+```
+
+**Breakdown:**
+- `-t rsa` → Key type (RSA is widely compatible)
+- `-b 4096` → Key size in bits (4096 is secure)
+- `-f` → File path where to save the key
+- `-N ""` → Empty passphrase (no password)
+
+**Output:**
+```
+Generating public/private rsa key pair.
+Your identification has been saved in C:\Users\YourName\.ssh\id_rsa.
+Your public key has been saved in C:\Users\YourName\.ssh\id_rsa.pub.
+The key fingerprint is:
+SHA256:xxxxx...
+```
+
+</details>
+
+<details>
+<summary><strong>Step 4: View Your Public Key</strong></summary>
+
+Display your public key:
+
+```powershell
+Get-Content "$env:USERPROFILE\.ssh\id_rsa.pub"
+```
+
+This is what you share with services like GitHub, GitLab, or your server.
+
+</details>
+
+<details>
+<summary><strong>Step 5: Set Proper Permissions</strong></summary>
+
+Secure your private key:
+
+```powershell
+# Set permissions so only you can read the private key
+$acl = Get-Acl "$env:USERPROFILE\.ssh\id_rsa"
+$acl.SetAccessRuleProtection($true, $false)
+$accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule(
+    [System.Security.Principal.WindowsIdentity]::GetCurrent().User,
+    "FullControl",
+    "Allow"
+)
+$acl.SetAccessRule($accessRule)
+Set-Acl "$env:USERPROFILE\.ssh\id_rsa" $acl
+```
+
+</details>
+
+### File Locations
+
+| File | Location | Purpose |
+| --- | --- | --- |
+| Private Key | `C:\Users\YourName\.ssh\id_rsa` | Keep secret, never share |
+| Public Key | `C:\Users\YourName\.ssh\id_rsa.pub` | Share with services |
+
+---
+
+## 💻 Command Prompt (Windows)
+
+### Quick Start
+
+Generate an SSH key pair using Command Prompt:
+
+```cmd
+ssh-keygen -t rsa -b 4096 -f "%USERPROFILE%\.ssh\id_rsa" -N ""
+```
+
+### Step-by-Step Tutorial
+
+<details>
+<summary><strong>Step 1: Open Command Prompt</strong></summary>
+
+1. Press `Win + R`
+2. Type `cmd` and press **Enter**
+3. Or press `Win + X` and select **Command Prompt (Admin)**
+
+</details>
+
+<details>
+<summary><strong>Step 2: Create .ssh Directory</strong></summary>
+
+Create the `.ssh` folder:
+
+```cmd
+if not exist "%USERPROFILE%\.ssh" mkdir "%USERPROFILE%\.ssh"
+```
+
+**Explanation:**
+- `%USERPROFILE%` → Your Windows user directory (e.g., `C:\Users\YourName`)
+- `if not exist` → Checks if the directory exists
+- `mkdir` → Creates a new directory
+
+</details>
+
+<details>
+<summary><strong>Step 3: Generate SSH Key</strong></summary>
+
+Generate your SSH key:
+
+```cmd
+ssh-keygen -t rsa -b 4096 -f "%USERPROFILE%\.ssh\id_rsa" -N ""
+```
+
+**Breakdown:**
+- `-t rsa` → Key type (RSA is widely compatible)
+- `-b 4096` → Key size in bits (4096 is secure)
+- `-f` → File path where to save the key
+- `-N ""` → Empty passphrase (no password)
+
+**Output:**
+```
+Generating public/private rsa key pair.
+Your identification has been saved in C:\Users\YourName\.ssh\id_rsa.
+Your public key has been saved in C:\Users\YourName\.ssh\id_rsa.pub.
+The key fingerprint is:
+SHA256:xxxxx...
+```
+
+</details>
+
+<details>
+<summary><strong>Step 4: View Your Public Key</strong></summary>
+
+Display your public key:
+
+```cmd
+type "%USERPROFILE%\.ssh\id_rsa.pub"
+```
+
+Copy the entire output to share with services like GitHub, GitLab, or your server.
+
+</details>
+
+<details>
+<summary><strong>Step 5: Verify Installation</strong></summary>
+
+List your SSH keys:
+
+```cmd
+dir "%USERPROFILE%\.ssh"
+```
+
+You should see:
+- `id_rsa` (private key)
+- `id_rsa.pub` (public key)
+
+</details>
+
+### File Locations
+
+| File | Location | Purpose |
+| --- | --- | --- |
+| Private Key | `C:\Users\YourName\.ssh\id_rsa` | Keep secret, never share |
+| Public Key | `C:\Users\YourName\.ssh\id_rsa.pub` | Share with services |
+
+---
+
+## 🐧 Bash (Linux / macOS)
+
+### Quick Start
+
+Generate an SSH key pair using Bash:
+
+```bash
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
+```
+
+### Step-by-Step Tutorial
+
+<details>
+<summary><strong>Step 1: Open Terminal</strong></summary>
+
+- **Linux (Ubuntu):** Press `Ctrl + Alt + T` or search for "Terminal"
+- **macOS:** Press `Cmd + Space`, type "Terminal", and press **Enter**
+
+You should see a prompt ending with `$`
+
+</details>
+
+<details>
+<summary><strong>Step 2: Create .ssh Directory</strong></summary>
+
+Create the `.ssh` folder in your home directory:
+
+```bash
+mkdir -p ~/.ssh
+```
+
+**Explanation:**
+- `mkdir` → Make directory
+- `-p` → Create parent directories if needed
+- `~` → Your home directory (e.g., `/home/username`)
+
+</details>
+
+<details>
+<summary><strong>Step 3: Generate SSH Key</strong></summary>
+
+Generate your SSH key:
+
+```bash
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
+```
+
+**Breakdown:**
+- `-t rsa` → Key type (RSA is widely compatible)
+- `-b 4096` → Key size in bits (4096 is secure)
+- `-f` → File path where to save the key
+- `-N ""` → Empty passphrase (no password)
+
+**Output:**
+```
+Generating public/private rsa key pair.
+Your identification has been saved in /home/username/.ssh/id_rsa.
+Your public key has been saved in /home/username/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:xxxxx...
+```
+
+</details>
+
+<details>
+<summary><strong>Step 4: View Your Public Key</strong></summary>
+
+Display your public key:
+
+```bash
+cat ~/.ssh/id_rsa.pub
+```
+
+This is what you share with services like GitHub, GitLab, or your server.
+
+</details>
+
+<details>
+<summary><strong>Step 5: Set Proper Permissions</strong></summary>
+
+Secure your SSH directory and private key:
+
+```bash
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/id_rsa
+chmod 644 ~/.ssh/id_rsa.pub
+```
+
+**Breakdown:**
+- `chmod 700 ~/.ssh` → Only you can read/write/execute the directory
+- `chmod 600 ~/.ssh/id_rsa` → Only you can read/write the private key
+- `chmod 644 ~/.ssh/id_rsa.pub` → Anyone can read, only you can write the public key
+
+</details>
+
+<details>
+<summary><strong>Step 6: Verify Installation</strong></summary>
+
+List your SSH keys:
+
+```bash
+ls -la ~/.ssh/
+```
+
+You should see:
+- `id_rsa` (private key)
+- `id_rsa.pub` (public key)
+
+</details>
+
+### File Locations
+
+| File | Location | Purpose |
+| --- | --- | --- |
+| Private Key | `~/.ssh/id_rsa` | Keep secret, never share |
+| Public Key | `~/.ssh/id_rsa.pub` | Share with services |
+
+---
+
+## 📋 Quick Reference
+
+| Action | PowerShell | Command Prompt | Bash |
+| --- | --- | --- | --- |
+| Create .ssh folder | `New-Item -ItemType Directory -Path "$env:USERPROFILE\.ssh"` | `mkdir "%USERPROFILE%\.ssh"` | `mkdir -p ~/.ssh` |
+| Generate key | `ssh-keygen -t rsa -b 4096 -f "$env:USERPROFILE\.ssh\id_rsa" -N ""` | `ssh-keygen -t rsa -b 4096 -f "%USERPROFILE%\.ssh\id_rsa" -N ""` | `ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""` |
+| View public key | `Get-Content "$env:USERPROFILE\.ssh\id_rsa.pub"` | `type "%USERPROFILE%\.ssh\id_rsa.pub"` | `cat ~/.ssh/id_rsa.pub` |
+| List SSH keys | `Get-ChildItem "$env:USERPROFILE\.ssh"` | `dir "%USERPROFILE%\.ssh"` | `ls -la ~/.ssh/` |
+
+---
+
+## ⚠️ Security Tips
+
+- **Never share your private key** (`id_rsa`). Only share the public key (`id_rsa.pub`).
+- **Set proper permissions** on the `.ssh` directory and files.
+- **Use a passphrase** if you want additional security: remove the `-N ""` parameter and enter a passphrase when prompted.
+- **Back up your keys** in a secure location.
+- **Use different keys** for different purposes (work, personal, etc.).
+
+<details>
+<summary><strong>ping</strong> — Test network connection</summary>
+
+* `ping -c 4 google.com` → 4 requests
+
+</details>
+
+<details>
+<summary><strong>curl</strong> — HTTP requests</summary>
+
+* `curl -O file.url` → Save file
+
+</details>
+
+<details>
+<summary><strong>wget</strong> — Download file</summary>
+
+* `wget <url>` → Download URL
+  * Example: `wget https://example.com/file.zip`
+
+</details>
+
+## 🧰 Process Management
+
+| Command | Description |
+| ----------- | ----------- |
+|`ps aux`	|Show all processes|
+|`kill <pid>`	|Kill process|
+|`kill -9 <pid>`|	Force kill|
+|`pkill <name>`	|Kill processes by name|
+
+### Flags & Details
+
+<details>
+<summary><strong>ps</strong> — Show processes</summary>
+
+* `ps aux` → All processes
+
+</details>
+
+<details>
+<summary><strong>kill</strong> — Kill processes</summary>
+
+* `kill -9 1234` → Force kill process
+
+</details>
+
+## 📜 Archiving & Compression
+
+| Command | Description |
+| ----------- | ----------- |
+|`tar -cvf archive.tar <folder>`|	Create archive|
+|`tar -xvf archive.tar`	|Extract archive|
+|`tar -czvf archive.tar.gz <folder>`|	Compress|
+|`unzip <file.zip>`	|Extract ZIP|
+
+### Flags & Details
+
+<details>
+<summary><strong>tar</strong> — Archiving and compression</summary>
+
+* `tar -czvf file.tar.gz folder` → compress
+
+* `tar -xvf file.tar` → extract
+
+</details>
+
+## 📚 Further Reading
+
+:::tip[Tips]
+
+You can automatically complete commands and paths with `Tab`
+
+:::
+
+- `man <command>` shows documentation for a command
+- `--help` provides quick help
+
+> Fully compatible with Docusaurus (MDX + TSX) ✅
