@@ -5,6 +5,8 @@ Zusammen ergeben sie das, was man als "Claude Code" benutzt.
 
 ## Model vs. Harness
 
+![Übersicht Harness und Model, inkl. Einsatzzweck von Opus, Sonnet und Haiku](./img/harness-model.jpg)
+
 - Das **Model** (z. B. Opus, Sonnet oder Haiku) kann Anfragen interpretieren,
   Reasoning durchführen und antworten – aber es kann selbst **keine Dateien
   lesen oder schreiben und keine Befehle ausführen**.
