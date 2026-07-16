@@ -27,8 +27,8 @@ Beispiel für eine `.claude/settings.json` in einem Projekt:
 
 - Permissions lassen sich auch interaktiv über `/permissions` in der Claude
   CLI erstellen.
-- Der `/fewer`-Befehl prüft die Transkripte vergangener Sessions, fasst
-  häufig bestätigte Tool-Calls zusammen und schlägt passende
+- Der `/fewer-permission-prompts`-Befehl prüft die Transkripte vergangener
+  Sessions, fasst häufig bestätigte Tool-Calls zusammen und schlägt passende
   Permission-Regeln vor, die unter `allow` aufgenommen werden könnten.
 
 ## Globale (User-Level) Permissions

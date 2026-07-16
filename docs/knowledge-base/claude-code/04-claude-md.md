@@ -5,7 +5,9 @@ mitgegeben wird.
 
 - Erstellen lässt sie sich mit `/init` – Claude durchsucht dabei das Projekt
   selbstständig und generiert die Datei automatisch.
-- Die Datei muss im **Root**-Verzeichnis liegen.
+- Die Datei liegt im **Root des Verzeichnisses, in dem Claude gestartet
+  wird** – das ist nicht zwangsläufig das Root des gesamten Repos (siehe
+  Monorepo-Beispiel unten).
 - Da `CLAUDE.md` immer im Context vorhanden ist, sollte sie **nicht zu groß**
   werden. Wie viel Context aktuell belegt ist, lässt sich mit `/context`
   prüfen.

@@ -6,8 +6,10 @@ niedriges Effort-Level lässt das Model mit weniger Aufwand (und günstiger)
 arbeiten.
 
 - Effort wird manuell über `/effort` gewechselt.
-- Anders als beim Model-Wechsel bricht ein Effort-Wechsel **nicht** den
-  Prompt-Cache.
+- Ein Effort-Wechsel mitten in der Session bricht – genau wie ein
+  Model-Wechsel – den Prompt-Cache: Die CLI warnt vor dem Wechsel, dass der
+  aktuelle Context dabei verloren geht. Effort sollte daher möglichst zu
+  Sessionbeginn festgelegt werden, nicht mittendrin gewechselt.
 - Antwortet ein Model nicht wie gewünscht, sollte zuerst das **Effort-Level
   erhöht** werden, bevor man zu einem stärkeren Model wechselt.
 

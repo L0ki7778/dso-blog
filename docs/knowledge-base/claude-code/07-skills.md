@@ -9,9 +9,8 @@ mitgeliefert wird.
 - Neue Skills werden mit dem `/skill-creator`-Befehl in der Claude CLI
   erstellt.
 - Ein Skill braucht mindestens einen **Titel** (`name`) und eine
-  **Description**. Optional lassen sich außerdem festlegen: ein bestimmtes
-  **Model**, **Permissions**, ein **Effort**-Level sowie ob der Skill vom
-  Nutzer oder vom Model selbst ausgelöst werden darf.
+  **Description**. Alle weiteren Properties sind optional – siehe die
+  vollständige Übersicht unten.
 - Skills liegen unter `.claude/skills/<skill-name>/SKILL.md`. Der
   Ordnername (`<skill-name>`) sollte mit dem `name` des Skills
   übereinstimmen.
@@ -20,9 +19,26 @@ mitgeliefert wird.
   Situation zur Description, greift Claude auf den Skill zurück.
 - Nach dem Erstellen eines neuen Skills muss der Client neu geladen werden
   (`/reload`).
-- Weil Skills ein eigenes Model festlegen können, lassen sich verschiedene
-  Modelle nutzen, **ohne den Prompt-Cache zu brechen** – anders als ein
-  manueller `/model`-Wechsel mitten in der Session.
+
+## Config-Properties (Frontmatter)
+
+Alle Einstellungen eines Skills stehen im YAML-Frontmatter am Anfang der
+`SKILL.md`, zwischen den beiden `---`-Zeilen:
+
+| Property | Pflicht? | Beschreibung |
+|---|---|---|
+| `name` | Pflicht | Eindeutiger Skill-Name; sollte mit dem Ordnernamen übereinstimmen. |
+| `description` | Pflicht | Entscheidet, ob und wann der Skill automatisch vom Model verwendet wird (siehe oben). Sollte auch den Auslöse-Kontext klar benennen. |
+| `allowed-tools` | optional | Schränkt ein, welche Tools der Skill verwenden darf, z. B. erlaubt `Bash(gh *)` nur `gh`-Aufrufe über Bash. |
+| `context` | optional | z. B. `fork` – lässt den Skill in einem eigenen, abgetrennten Kontext laufen statt direkt im Hauptgespräch. |
+| `agent` | optional | Legt fest, welcher Subagent-Typ den Skill ausführt, z. B. `Explore`. |
+
+Die Kursnotizen erwähnten außerdem `model`, `effort` und eine Property für
+"User- oder Model-Invocation". Ein direkter Test (Skill mit `model: haiku`,
+ohne `context: fork`) zeigte keinerlei Wirkung – der Skill lud identisch zu
+einem Skill ganz ohne diese Properties, ohne erkennbaren Model-Wechsel oder
+Subagent-Aufruf. Da sie sich nicht bestätigen ließen, stehen sie hier
+absichtlich nicht in der Tabelle.
 
 ## Argumente
 
@@ -33,7 +49,6 @@ Skills können Argumente entgegennehmen. Im Skill werden sie über
 ---
 name: deploy
 description: Deploys our codebase to either staging or production
-model: sonnet
 ---
 
 # Deploy
