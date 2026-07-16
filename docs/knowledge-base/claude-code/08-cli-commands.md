@@ -44,6 +44,7 @@ umfasst nur die eingebauten Standardbefehle, sortiert nach Einsatzzweck.
 | Befehl | Beschreibung |
 |---|---|
 | `/agents` | Verwaltet spezialisierte Subagenten für bestimmte Aufgabentypen. |
+| `/hooks` | Öffnet den (nur lesenden) Hooks-Browser – zeigt alle konfigurierten Hooks gruppiert nach Event (siehe [Hooks](./09-hooks.md)). |
 | `/mcp` | Verwaltet Verbindungen zu MCP-Servern, inklusive OAuth-Login. |
 | `/review` | Fordert einen Code-Review der aktuellen Änderungen an. |
 | `/pr-comments` | Zeigt die Kommentare eines Pull Requests an. |

@@ -30,6 +30,11 @@ Beispiel für eine `.claude/settings.json` in einem Projekt:
 - Der `/fewer-permission-prompts`-Befehl prüft die Transkripte vergangener
   Sessions, fasst häufig bestätigte Tool-Calls zusammen und schlägt passende
   Permission-Regeln vor, die unter `allow` aufgenommen werden könnten.
+- Permission-Prompts lassen sich auch über einen `PreToolUse`- oder
+  `PermissionRequest`-**Hook** automatisch beantworten (siehe
+  [Hooks](./09-hooks.md) und [Hooks: Rezepte](./10-hooks-rezepte.md)) – ein
+  solcher Hook kann Regeln durchsetzen, die selbst im
+  `bypassPermissions`-Modus greifen.
 
 ## Globale (User-Level) Permissions
 

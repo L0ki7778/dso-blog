@@ -44,7 +44,7 @@ Skill zum Einsatz kommen soll.
 | `effort` | Nein | Effort-Level, solange der Skill aktiv ist – überschreibt das Session-Effort-Level (siehe [Effort-Level](./03-effort.md)). Default: erbt von der Session. Optionen: `low`, `medium`, `high`, `xhigh`, `max` – welche Stufen verfügbar sind, hängt vom Model ab. |
 | `context` | Nein | `fork` lässt den Skill in einem eigenen, abgetrennten Subagent-Kontext laufen statt direkt im Hauptgespräch. |
 | `agent` | Nein | Legt fest, welcher Subagent-Typ den Skill ausführt, wenn `context: fork` gesetzt ist, z. B. `Explore`. |
-| `hooks` | Nein | Hooks, die an den Lebenszyklus dieses Skills gebunden sind (eigenes Konfigurationsformat). |
+| `hooks` | Nein | Hooks, die an den Lebenszyklus dieses Skills gebunden sind (siehe [Hooks](./09-hooks.md) für das allgemeine Konfigurationsformat). |
 | `paths` | Nein | Glob-Pattern, die einschränken, bei welchen Dateien der Skill automatisch aktiviert wird. String (kommagetrennt) oder YAML-Liste – nur bei einer Übereinstimmung lädt Claude den Skill automatisch. |
 | `shell` | Nein | Shell für Inline-Befehle (`` !`command` `` und `` ```! ``-Blöcke, siehe unten) in diesem Skill. `bash` (Default) oder `powershell`. `powershell` führt Inline-Shell-Befehle unter Windows über PowerShell aus und erfordert `CLAUDE_CODE_USE_POWERSHELL_TOOL=1`. |
 
