@@ -48,13 +48,6 @@ Skill zum Einsatz kommen soll.
 | `paths` | Nein | Glob-Pattern, die einschränken, bei welchen Dateien der Skill automatisch aktiviert wird. String (kommagetrennt) oder YAML-Liste – nur bei einer Übereinstimmung lädt Claude den Skill automatisch. |
 | `shell` | Nein | Shell für Inline-Befehle (`` !`command` `` und `` ```! ``-Blöcke, siehe unten) in diesem Skill. `bash` (Default) oder `powershell`. `powershell` führt Inline-Shell-Befehle unter Windows über PowerShell aus und erfordert `CLAUDE_CODE_USE_POWERSHELL_TOOL=1`. |
 
-> Ein früherer lokaler Test mit `model: haiku` (ohne `context: fork`) zeigte
-> keine sichtbar unterschiedliche Ausführung gegenüber einem Skill ganz ohne
-> diese Property. Das widerspricht der offiziellen Doku nicht: Der
-> Model-Wechsel gilt laut Spezifikation nur für den aktuellen Turn und wird
-> nirgends sichtbar angezeigt, daher lässt sich seine Wirkung ohne Weiteres
-> nicht direkt beobachten.
-
 ## Argumente
 
 Skills können Argumente entgegennehmen. Im Skill werden sie über
