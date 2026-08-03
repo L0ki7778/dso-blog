@@ -198,4 +198,4 @@ oberster Ebene, `PermissionRequest` dagegen
 Events stehen in [Hooks: Erweitert](./11-hooks-erweitert.md).
 
 Für konkrete, direkt einsetzbare Beispiele siehe
-[Hooks: Rezepte](./10-hooks-rezepte.md).
+[Hooks: Rezepte](./10-hooks-recipes.md).

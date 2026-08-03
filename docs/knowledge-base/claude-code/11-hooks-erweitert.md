@@ -3,7 +3,7 @@
 Vollständige Event-Übersicht, Matcher-Syntax, die drei alternativen
 Hook-Typen (Prompt, Agent, HTTP) sowie Grenzen und Troubleshooting.
 Grundlagen und ein erstes Beispiel stehen in [Hooks](./09-hooks.md), fertige
-Konfigurationen in [Hooks: Rezepte](./10-hooks-rezepte.md).
+Konfigurationen in [Hooks: Rezepte](./10-hooks-recipes.md).
 
 ## Alle Hook-Events
 

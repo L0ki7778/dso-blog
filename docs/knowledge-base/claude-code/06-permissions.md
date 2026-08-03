@@ -32,7 +32,7 @@ Beispiel für eine `.claude/settings.json` in einem Projekt:
   Permission-Regeln vor, die unter `allow` aufgenommen werden könnten.
 - Permission-Prompts lassen sich auch über einen `PreToolUse`- oder
   `PermissionRequest`-**Hook** automatisch beantworten (siehe
-  [Hooks](./09-hooks.md) und [Hooks: Rezepte](./10-hooks-rezepte.md)) – ein
+  [Hooks](./09-hooks.md) und [Hooks: Rezepte](./10-hooks-recipes.md)) – ein
   solcher Hook kann Regeln durchsetzen, die selbst im
   `bypassPermissions`-Modus greifen.
 
