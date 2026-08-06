@@ -1,0 +1,182 @@
+---
+id: docker-commands
+slug: /docker-commands
+title: Docker Commands
+description: Every Docker command used in the virtual-machine deployment guides, with every flag explained.
+---
+
+# Docker Commands
+
+Reference for every Docker command used in the [Virtual Machine](../../virtual-machine/00-overview.md) deployment guides ([Deploying a Dockerized App on the VM](../../virtual-machine/02-docker-deployment.md) and [Managing a Running Container](../../virtual-machine/03-container-management.md)), with each flag broken down. The same flag is explained again wherever it reappears, so each command's block is self-contained.
+
+## 🏗️ Building & Running
+
+| Command | Description |
+| --- | --- |
+| `docker build -t <name>:local .` | Build an image from a Dockerfile in the current directory |
+| `docker run -d --name <name> --restart unless-stopped -p 8000:8000 --env-file src/.env <name>:local` | Start a container from an image |
+| `docker run -d --name <name> --restart unless-stopped -p 8000:8000 --env-file src/.env -v <name>-db:/app/src/db.sqlite3 <name>:local` | Start a container with a persistent volume |
+
+### Flags & Details
+
+<details>
+<summary><strong>docker build</strong> — Build an image from a Dockerfile</summary>
+
+```bash
+docker build -t <prefered_name_here>:local .
+```
+
+* `-t <name>:local` → Tag the resulting image with a name and a tag (`local` here), so it can be referenced later without its image ID
+* `.` → Build context: the current directory, which must contain the `Dockerfile`
+
+</details>
+
+<details>
+<summary><strong>docker run</strong> — Create and start a container from an image</summary>
+
+```bash
+docker run -d \
+  --name <choosen_name_here> \
+  --restart unless-stopped \
+  -p 8000:8000 \
+  --env-file src/.env \
+  <prefered_name_here>:local
+```
+
+* `-d` → Detached mode: run the container in the background and print its ID instead of attaching to it
+* `--name <choosen_name_here>` → Give the container a fixed, human-readable name instead of a random one, so later commands (`docker logs`, `docker exec`, `docker stop`, …) can target it by name
+* `--restart unless-stopped` → Restart policy: automatically restart the container on crash or host reboot, unless it was explicitly stopped
+* `-p 8000:8000` → Publish a port as `<host-port>:<container-port>`, making the container's port 8000 reachable at `localhost:8000` on the VM
+* `--env-file src/.env` → Load environment variables from the given file into the container instead of passing each one with `-e`
+
+With a persistent volume for the SQLite DB:
+
+```bash
+docker run -d \
+  --name <choosen_name_here> \
+  --restart unless-stopped \
+  -p 8000:8000 \
+  --env-file src/.env \
+  -v <choosen_name_here>-db:/app/src/db.sqlite3 \
+  <choosen_name_here>:local
+```
+
+* `-v <name>-db:/app/src/db.sqlite3` → Mount a named volume (`<name>-db`) at the given path inside the container, as `<volume-name>:<container-path>`, so the file survives container removal/recreation
+
+</details>
+
+## 📋 Inspecting & Controlling Containers
+
+| Command | Description |
+| --- | --- |
+| `docker ps` | List running containers |
+| `docker logs -f <name>` | Stream a container's logs |
+| `docker stop <name>` | Stop a running container |
+| `docker rm <name>` | Remove a stopped container |
+| `docker restart <name>` | Restart a container |
+
+### Flags & Details
+
+<details>
+<summary><strong>docker ps</strong> — List running containers</summary>
+
+```bash
+docker ps
+```
+
+No flags used — lists all currently running containers with their ID, image, status, and name.
+
+</details>
+
+<details>
+<summary><strong>docker logs</strong> — View a container's output</summary>
+
+```bash
+docker logs -f <prefered_name_here>
+```
+
+* `-f` → Follow the log output continuously, like `tail -f`, instead of printing it once and exiting
+
+</details>
+
+<details>
+<summary><strong>docker stop</strong> — Stop a running container</summary>
+
+```bash
+docker stop <prefered_name_here>
+```
+
+No flags used — sends a graceful shutdown signal to the named container.
+
+</details>
+
+<details>
+<summary><strong>docker rm</strong> — Remove a container</summary>
+
+```bash
+docker rm <prefered_name_here>
+```
+
+No flags used — deletes the named (already-stopped) container. Needed before `docker run` can reuse the same `--name`.
+
+</details>
+
+<details>
+<summary><strong>docker restart</strong> — Restart a container</summary>
+
+```bash
+docker restart <prefered_name_here>
+```
+
+No flags used — stops and immediately starts the named container again, e.g. to pick up a file change that the app's autoreloader missed.
+
+</details>
+
+## 🖥️ Running Commands Inside a Container
+
+| Command | Description |
+| --- | --- |
+| `docker exec -it <name> python manage.py createsuperuser` | Run an interactive management command |
+| `docker exec <name> python manage.py <command>` | Run a one-off management command |
+| `docker exec <name> python some_script.py` | Run an arbitrary script |
+| `docker exec -it <name> python manage.py shell` | Open an interactive Python/Django shell |
+| `docker exec -it <name> bash` | Open an interactive shell inside the container |
+
+### Flags & Details
+
+<details>
+<summary><strong>docker exec</strong> — Run a command inside a running container</summary>
+
+```bash
+docker exec -it <prefered_name_here> python manage.py createsuperuser
+docker exec <prefered_name_here> python manage.py <command>
+docker exec <prefered_name_here> python some_script.py
+docker exec -it <prefered_name_here> python manage.py shell
+docker exec -it <prefered_name_here> bash
+```
+
+* `-i` → Interactive: keep STDIN open so the command can read input (e.g. the superuser prompts)
+* `-t` → Allocate a pseudo-TTY, so output is formatted like a real terminal (needed for shells and interactive prompts)
+* `-it` → `-i` and `-t` combined; used together for anything you need to type into (`createsuperuser`, `manage.py shell`, `bash`)
+* No flags → plain `docker exec <name> <command>` is enough for one-shot, non-interactive commands (running a management command or script and letting it exit on its own)
+
+</details>
+
+## 📁 Copying Files
+
+| Command | Description |
+| --- | --- |
+| `docker cp <src> <name>:<dest>` | Copy a file from the host into a container |
+
+### Flags & Details
+
+<details>
+<summary><strong>docker cp</strong> — Copy files between the host and a container</summary>
+
+```bash
+docker cp src/btw_app/urls.py <prefered_name_here>:/app/src/btw_app/urls.py
+```
+
+No flags used — copies the local file at the first path into the container at the given path, addressed as `<container-name>:<path>`. Copying in the other direction (container → host) just swaps the argument order.
+
+</details>
